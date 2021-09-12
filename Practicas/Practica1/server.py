@@ -2,8 +2,6 @@
 
 import socket
 import time
-import sys
-import os
 from buscaminas import Buscaminas
 
 HOST = "127.0.0.1"
@@ -29,8 +27,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
             tam, num_minas = (9, 10)
         elif dificultad == '2':
             tam, num_minas = (16, 40)
-        else:
-            sys.exit('Dificultad no valida')
 
         game = Buscaminas(tam, num_minas)
 
@@ -41,9 +37,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
         t1 = None
 
         while True:
-            # os.system('clear')
 
-            print(f'Esperando respuesta...')
+            print(f'Esperando casilla...')
 
             casilla = Client_conn.recv(buffer_size).decode('utf-8')
 
@@ -52,8 +47,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
 
             casilla_valida = game.seleccionar_casilla(casilla)
 
-            if casilla == 'd4':
-                game.estado = 'Win'
             if casilla_valida:
                 print(f'Se valido la casilla {casilla} ...')
             else:
@@ -67,8 +60,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
             if game.estado in ['Win', 'Lose']:
                 t2 = time.time()
                 tiempo_total = str(round(t2 - t1, 2))
-                Client_conn.sendall(str.encode(f'W{str(tiempo_total)}'))
+                respuesta = game.estado[0] + str(tiempo_total)
+                Client_conn.sendall(str.encode(respuesta))
                 break
 
         print(f'Game over : You {game.estado}')
-        print(f'Time: {tiempo_total}')
+        print(f'Time: {tiempo_total} s.')

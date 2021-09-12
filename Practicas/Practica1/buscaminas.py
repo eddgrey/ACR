@@ -1,7 +1,6 @@
 import random
 import sys
 from io import StringIO
-from typing import Tuple
 
 
 class Buscaminas:
@@ -18,8 +17,9 @@ class Buscaminas:
         self.tablero = [[{'valor': 0, 'is_mina': False, 'visible': False}
                          for j in range(tam)] for i in range(tam)]
 
-        for mina in range(num_minas):
-            self.crear_mina_aleatoria()
+        n = 0
+        while n < num_minas:
+            n += self.crear_mina_aleatoria()
 
         self.asignar_valor_casillas()
 
@@ -79,8 +79,12 @@ class Buscaminas:
         row = random.randint(0, self.tam - 1)
         col = random.randint(0, self.tam - 1)
 
-        self.tablero[row][col]['is_mina'] = True
-        self.tablero[row][col]['valor'] = 'X'
+        if self.tablero[row][col]['is_mina']:
+            return 0
+        else:
+            self.tablero[row][col]['is_mina'] = True
+            self.tablero[row][col]['valor'] = 'X'
+            return 1
 
     def asignar_valor_casillas(self):
         for row in range(self.tam):
@@ -109,13 +113,3 @@ class Buscaminas:
     def win_game(self):
         self.estado = 'Win'
         self.imprimir_tablero()
-
-
-if __name__ == '__main__':
-    tab = Buscaminas(5, 3)
-
-    while tab.estado == 'Jugando':
-        tablero = tab.imprimir_tablero()
-        print(tablero)
-        # casilla = list(input('Ingrese columna y fila (d4, e5, etc): '))
-        # tab.seleccionar_casilla(casilla)
