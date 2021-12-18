@@ -1,0 +1,32 @@
+syntax = "proto3";
+package practica5;
+
+service Operaciones {
+
+    rpc Auth(CamposDeEntrada) returns (CamposDeSalida);
+
+    rpc Create(CamposDeEntrada) returns (CamposDeSalida);
+
+    rpc Read(CamposDeEntrada) returns (stream CamposDeSalida);
+
+    rpc Write(stream CamposDeEntrada) returns (CamposDeSalida) {}
+
+    rpc Remove(CamposDeEntrada) returns (CamposDeSalida) {}
+
+    rpc Rename(CamposDeEntrada) returns (CamposDeSalida) {}
+
+    rpc Mkdir(CamposDeEntrada) returns (CamposDeSalida) {}
+
+    rpc Rmdir(CamposDeEntrada) returns (CamposDeSalida) {}
+
+    rpc Readdir(CamposDeEntrada) returns (stream CamposDeSalida) {}
+}
+
+message CamposDeEntrada {
+    string entrada1 = 1;
+    string entrada2 = 2;
+}
+
+message CamposDeSalida {
+    string salida1 = 1;
+}
